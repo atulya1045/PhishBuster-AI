@@ -14,7 +14,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from utils.preprocessing import preprocess_data
+from utils.preprocessing import URLPreprocessor
 
 def load_data():
     file_path = os.path.join(project_root, "data", "cleaned_phishbuster.csv")
@@ -79,7 +79,8 @@ if __name__ == "__main__":
     df = load_data()
 
     print("🧹 Preprocessing data...")
-    df, label_column = preprocess_data(df)
+    preprocessor = URLPreprocessor()
+    df, label_column = preprocessor.preprocess_data(df)
 
     print("🧪 Splitting data...")
     X_train, X_test, y_train, y_test = split_data(df, label_column)
@@ -96,3 +97,4 @@ if __name__ == "__main__":
 
     save_model(best_clf, custom_threshold)
     print("🎉 Training complete.")
+# This script trains an XGBoost model on the PhishBuster dataset, tunes hyperparameters using Randomized Search,
