@@ -1,0 +1,7 @@
+README.md
+setup.py
+phishbuster.egg-info/PKG-INFO
+phishbuster.egg-info/SOURCES.txt
+phishbuster.egg-info/dependency_links.txt
+phishbuster.egg-info/requires.txt
+phishbuster.egg-info/top_level.txt
