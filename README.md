@@ -1,18 +1,18 @@
 # 🛡️ PhishBuster AI
 
-**PhishBuster AI** is a multilingual, real-time phishing detection system powered by fine-tuned Transformer models. It combines explainable AI, corporate-grade threat simulation, and a modern UI — ideal for security R&D and educational demos.
+**PhishBuster AI** is an intelligent phishing detection suite powered by machine learning.
+
+![PhishBuster Banner](banner.png) 
+
+## 🚀 Features
+
+- 🔗 Detect **phishing URLs** using XGBoost
+- 📧 Identify **email phishing** with BERT + Logistic Regression ensemble
+- 📊 Visualize predictions using **SHAP explainability**
+- 📁 Supports **bulk analysis** of URLs and emails via CSV
+- 🎯 Built with **Streamlit** for a clean, interactive UI
 
 ---
 
-## 🔧 Tech Stack
-
-- **Models:** Logistic Regression, DistilBERT, mBERT
-- **Explainability:** SHAP, Attention weights
-- **Frontend:** Streamlit
-- **Languages:** Python, Hindi (via mBERT)
-- **Deployment:** Streamlit Cloud or Hugging Face Spaces
-
----
-
-## 📁 Project Structure
+## 📦 Project Structure
 
