@@ -5,7 +5,6 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.metrics import classification_report, confusion_matrix
-import joblib
 import xgboost as xgb
 from scipy.stats import uniform, randint
 
@@ -64,10 +63,10 @@ def evaluate_with_threshold(clf, X_test, y_test, threshold):
     print(confusion_matrix(y_test, y_pred))
 
 def save_model(clf, threshold):
-    model_path = os.path.join(project_root, "models", "xgboost_model.pkl")
+    model_path = os.path.join(project_root, "models", "xgboost_model.json")
     meta_path = os.path.join(project_root, "models", "xgboost_metadata.json")
 
-    joblib.dump(clf, model_path)
+    clf.save_model(model_path)  # ✅ Changed from joblib to native XGBoost save
     with open(meta_path, 'w') as f:
         json.dump({'threshold': threshold}, f)
 
@@ -97,4 +96,4 @@ if __name__ == "__main__":
 
     save_model(best_clf, custom_threshold)
     print("🎉 Training complete.")
-# This script trains an XGBoost model on the PhishBuster dataset, tunes hyperparameters using Randomized Search,
+#     st.subheader("Email Analyzer")

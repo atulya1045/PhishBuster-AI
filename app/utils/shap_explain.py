@@ -1,21 +1,36 @@
+# app/utils/shap_explain.py
+
 import shap
-import numpy as np
+import pandas as pd
+import streamlit as st
+import joblib
+import os
 import matplotlib.pyplot as plt
 
-def explain_email_prediction(email_text, model):
-    # Vectorize using the same preprocessing inside model
-    if hasattr(model, "named_steps"):  # pipeline case
-        vectorizer = model.named_steps["tfidf"]
-        classifier = model.named_steps["classifier"]
-        X_transformed = vectorizer.transform([email_text])
-    else:
-        classifier = model
-        X_transformed = [email_text]  # Assume it handles text input directly
+from .feature_engineering import extract_email_features  # Updated import
 
-    explainer = shap.Explainer(classifier.predict_proba, X_transformed)
-    shap_values = explainer(X_transformed)
+# Paths
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+MODEL_PATH = os.path.join(BASE_DIR, "models", "logreg_bert_ensemble.joblib")
 
-    fig, ax = plt.subplots(figsize=(10, 4))
-    shap.plots.bar(shap_values[0], show=False)
-    return fig
-    # Note: This assumes the model is compatible with SHAP and can handle text input.
+def explain_email_prediction(email_text: str):
+    st.subheader("🧠 SHAP Explanation for Email Prediction")
+    st.markdown("Understand **why** the model predicted this email as phishing or legitimate.")
+
+    # Load model
+    model = joblib.load(MODEL_PATH)
+
+    # Extract features
+    features = extract_email_features(email_text)
+    
+    # Explain
+    explainer = shap.Explainer(model.predict_proba, features)
+    shap_values = explainer(features)
+
+    st.markdown("### 🔍 Feature Contribution (Waterfall Plot)")
+    fig1 = shap.plots.waterfall(shap_values[0], show=False)
+    st.pyplot(fig1)
+
+    st.markdown("### 📊 Feature Importance (Bar Chart)")
+    fig2 = shap.plots.bar(shap_values, show=False)
+    st.pyplot(fig2)
