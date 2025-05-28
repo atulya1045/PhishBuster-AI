@@ -70,7 +70,7 @@ PhishBuster AI contributes to cyber defense by:
 
 ## 🖥️ **How to Run Locally**
 
-## Clone the repository
+### Clone the repository
 ```
 git clone https://github.com/atulya1045/PhishBuster-AI.git
 cd PhishBuster-AI
