@@ -118,5 +118,4 @@ This app is deployed on **Streamlit Cloud**:
 
 MIT License © 2025 Atulya Sawant
 
-```
 
