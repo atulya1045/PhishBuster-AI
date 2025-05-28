@@ -70,24 +70,27 @@ PhishBuster AI contributes to cyber defense by:
 
 ## 🖥️ **How to Run Locally**
 
-# Clone the repository
+## Clone the repository
 ```
 git clone https://github.com/atulya1045/PhishBuster-AI.git
 cd PhishBuster-AI
 ```
 
-# (Optional) Create and activate a virtual environment
+## (Optional) Create and activate a virtual environment
+
 ```
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-# Install dependencies
+## Install dependencies
+
 ```
 pip install -r requirements.txt
 ```
 
-# Run the Streamlit app
+## Run the Streamlit app
+
 ```
 streamlit run app/app.py
 ```
