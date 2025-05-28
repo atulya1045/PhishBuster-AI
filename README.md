@@ -74,7 +74,7 @@ PhishBuster AI contributes to cyber defense by:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/PhishBuster-AI.git
+git clone https://github.com/atulya1045/PhishBuster-AI.git
 cd PhishBuster-AI
 
 # (Optional) Create and activate a virtual environment
@@ -120,4 +120,3 @@ MIT License © 2025 Atulya Sawant
 
 ```
 
----
