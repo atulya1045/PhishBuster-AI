@@ -7,7 +7,6 @@ from utils.db_utils import fetch_all_logs
 
 
 def run():
-
     # Fetch data
     df = fetch_all_logs()
 

@@ -131,3 +131,53 @@ elif task == "ℹ️ About":
 st.markdown("---")
 st.caption("🛡️ Powered by Streamlit & Machine Learning | All rights reserved.")
 # End of app.py
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+import threading
+
+# Start FastAPI server for frontend
+app_fastapi = FastAPI()
+
+# Allow frontend (localhost:3000) to access this API
+app_fastapi.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For dev only; restrict in prod
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app_fastapi.post("/api/predict")
+async def predict_endpoint(request: Request):
+    body = await request.json()
+    text = body.get("input", "")
+
+    if "@" in text or "Subject:" in text:
+        result = predict_email(text)
+        return {
+            "type": "email",
+            "prediction": result["prediction"],
+            "probability": result["probability"],
+            "content": text
+        }
+    else:
+        result = predict_url(text)
+        return {
+            "type": "url",
+            "prediction": result["prediction"],
+            "probability": result["probability"],
+            "url": text
+        }
+
+# Run FastAPI server in background
+def run_fastapi():
+    uvicorn.run(app_fastapi, host="0.0.0.0", port=8000)
+
+@st.cache_resource
+def start_fastapi():
+    thread = threading.Thread(target=run_fastapi)
+    thread.start()
+
+# Start the FastAPI server
+start_fastapi()
