@@ -1,7 +1,7 @@
 
 ---
 
-```markdown
+
 # 🛡️ **PhishBuster AI**
 
 **PhishBuster AI** is an intelligent phishing detection suite powered by machine learning.
@@ -22,7 +22,6 @@
 
 ## 📁 **Project Structure**
 
-```
 
 PhishBuster-AI/
 ├── app/                # Streamlit app logic
@@ -46,7 +45,6 @@ PhishBuster-AI/
 ├── .gitignore          # Files to ignore in Git
 └── README.md           # Project documentation
 
-````
 
 ---
 
@@ -71,8 +69,7 @@ PhishBuster AI contributes to cyber defense by:
 ---
 
 ## 🖥️ **How to Run Locally**
-
-```bash
+```
 # Clone the repository
 git clone https://github.com/atulya1045/PhishBuster-AI.git
 cd PhishBuster-AI
@@ -86,7 +83,7 @@ pip install -r requirements.txt
 
 # Run the Streamlit app
 streamlit run app/app.py
-````
+```
 
 ---
 
