@@ -8,7 +8,8 @@ import xgboost as xgb
 import joblib
 import re
 
-from .feature_engineering import extract_email_features  # Updated
+from .feature_engineering import extract_email_features
+from .db_utils import log_prediction_to_db  # 🆕 Import logging function
 
 # Paths
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
@@ -27,10 +28,10 @@ def extract_url_features(url):
     features = {
         "url_length": len(url),
         "num_dots": url.count('.'),
-        "num_hyphens": url.count('-'),
-        "has_https": int("https" in url),
         "has_at_symbol": int("@" in url),
-        "has_ip": int(bool(re.search(r"\b\d{1,3}(\.\d{1,3}){3}\b", url))),
+        "has_hyphen": int("-" in url),
+        "has_https": int("https" in url),
+        "has_double_slash": int("//" in url)
     }
     return pd.DataFrame([features])
 
@@ -42,10 +43,20 @@ def predict_url(url: str):
     features = extract_url_features(url)
     proba = model.predict_proba(features)[0][1]
     prediction = int(proba >= THRESHOLD)
+    label = "Phishing" if prediction else "Legitimate"
+
+    # 🧾 Log to DB
+    log_prediction_to_db(
+        url=url,
+        email=None,
+        prediction=label,
+        confidence=round(proba, 4),
+        model_name="xgboost"
+    )
 
     return {
         "url": url,
-        "prediction": "Phishing" if prediction else "Legitimate",
+        "prediction": label,
         "probability": round(proba, 4),
         "features": features
     }
@@ -65,9 +76,19 @@ def predict_email(text: str):
     features = extract_email_features(text)
     prediction = model.predict(features)[0]
     proba = model.predict_proba(features)[0][1]
+    label = "Phishing" if prediction else "Legitimate"
+
+    # 🧾 Log to DB
+    log_prediction_to_db(
+        url=None,
+        email=text,
+        prediction=label,
+        confidence=round(proba, 4),
+        model_name="bert-logreg"
+    )
 
     return {
-        "prediction": "Phishing" if prediction else "Legitimate",
+        "prediction": label,
         "probability": round(proba, 4),
         "features": features
     }
@@ -80,4 +101,5 @@ def predict_bulk_emails(email_series):
         except Exception as e:
             results.append({"email": text, "error": str(e)})
     return pd.DataFrame(results)
+
 # --- Bulk Analysis ---

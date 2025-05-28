@@ -3,6 +3,7 @@
 import psycopg2
 import pandas as pd
 import os
+import numpy as np
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -41,7 +42,13 @@ def fetch_all_logs():
 
     return df
 
-def log_prediction_to_db(url=None, email=None, prediction="Unknown"):
+def log_prediction_to_db(url=None, email=None, prediction="Unknown", confidence=None, model_name=None):
+    # Convert numpy data types to native Python types
+    if isinstance(confidence, (np.generic, np.ndarray)):
+        confidence = confidence.item()
+    if isinstance(prediction, (np.generic, np.ndarray)):
+        prediction = prediction.item()
+
     try:
         conn = psycopg2.connect(
             dbname=os.getenv("DB_NAME"),
@@ -52,9 +59,9 @@ def log_prediction_to_db(url=None, email=None, prediction="Unknown"):
         )
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO detection_logs (timestamp, url, email, prediction)
-            VALUES (NOW(), %s, %s, %s)
-        """, (url, email, prediction))
+            INSERT INTO detection_logs (timestamp, url, email, prediction, confidence, model_name)
+            VALUES (NOW(), %s, %s, %s, %s, %s)
+        """, (url, email, prediction, confidence, model_name))
         conn.commit()
         cursor.close()
         conn.close()
