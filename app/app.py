@@ -1,9 +1,11 @@
+import streamlit as st
 import os
 import sys
 import json
-import streamlit as st
 import pandas as pd
 from pathlib import Path
+from utils.db_utils import log_prediction_to_db
+
 
 # Set project root
 project_root = Path(__file__).resolve().parent.parent
@@ -41,6 +43,7 @@ task = st.sidebar.radio("Select Task", [
     "📧 Email Phishing Detection",
     "📁 Bulk Analysis",
     "📊 SHAP Explanation (Email)",
+    "📈 Results Dashboard",
     "ℹ️ About"
 ])
 
@@ -55,6 +58,7 @@ if task == "🔗 URL Phishing Detection":
             st.info(f"🔍 Confidence Score: {result['probability']}")
         else:
             st.warning("Please enter a valid URL.")
+
 
 # --- Email Detection --- #
 elif task == "📧 Email Phishing Detection":
@@ -103,6 +107,12 @@ elif task == "📊 SHAP Explanation (Email)":
             explain_email_prediction(sample_email)
         else:
             st.warning("Please provide an email to explain.")
+
+# --- Results Dashboard --- #
+elif task == "📈 Results Dashboard":
+    import dashboard
+    st.header("📈 PhishBuster AI Results Dashboard")
+    dashboard.run()
 
 # --- About Section --- #
 elif task == "ℹ️ About":
